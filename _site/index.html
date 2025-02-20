@@ -24,11 +24,10 @@
 <meta property="og:url" content="http://localhost:4000/" />
 <meta property="og:site_name" content="Túlio Fernandes" />
 <meta property="og:type" content="website" />
-<link rel="next" href="http://localhost:4000/page2" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Home" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","author":{"@type":"Person","name":"Túlio Fernandes","url":"https://github.com/tuliofernandes"},"headline":"Home","name":"Túlio Fernandes","url":"http://localhost:4000/"}</script>
+{"@context":"https://schema.org","@type":"WebSite","author":{"@type":"Person","name":"Túlio Fernandes","url":"https://tuliofernandes.github.io"},"headline":"Home","name":"Túlio Fernandes","url":"http://localhost:4000/"}</script>
 <!-- End Jekyll SEO tag -->
 
 </head>
@@ -38,7 +37,7 @@
     <div class="container content">
       <header class="masthead">
         <h3 class="masthead-title">
-          <a href="/" title="Home">Túlio Fernandes</a>
+          <a href="//" title="Home">Túlio Fernandes</a>
 
           <nav class="nav">
             
@@ -55,54 +54,203 @@
   
   <article class="post">
     <h1 class="post-title">
-      <a href="/2020/04/04/introduction/">
-        Introduction
+      <a href="/linux/2025/02/19/first-linux-contribution/">
+        The story behind my first contribution to the Linux kernel
       </a>
     </h1>
 
-    <time datetime="2020-04-04T00:00:00-03:00" class="post-date">04 Apr 2020</time>
+    <time datetime="2025-02-19T10:14:20-03:00" class="post-date">19 Feb 2025</time>
 
-    <p><em>The Strange Case of Dr. Jekyll and Mr. Hyde</em> tells the story of a lawyer investigating the connection of two persons, Dr. Henry Jekyll and Mr. Edward Hyde. Chief among the novel’s supporting cast is a man by the name of Mr. Poole, Dr. Jekyll’s loyal butler.</p>
+    <p><strong>Attention: this is not a tutorial</strong>. This post combines technical approach and personal narrative. Steps like QEMU setup, debostrapping and kernel compiling are not being covered here. For this I suggest this excellent <a href="https://hackerbikepacker.com/syzbot">article</a> from Javier Carrasco Cruz.</p>
 
-<hr />
+<h1 id="prologue">Prologue</h1>
 
-<p>Poole is the butler for <a href="http://jekyllrb.com">Jekyll</a>, the static site generator. It’s designed and developed by <a href="https://twitter.com/mdo">@mdo</a> to provide a clear and concise foundational setup for any Jekyll site. It does so by furnishing a full vanilla Jekyll install with example layouts, pages, posts, and styles.</p>
+<p>Although I have been working in web development for the past six years and understand its challenges, I never found it particularly playful—please don’t misunderstand me, web colleagues; it’s simply a matter of personal preference. My true passions in computing have always been programming and operating systems—especially UNIX-based ones—and I have long been obsessed with the idea of uniting these two realms, whether professionally or as a hobby. I also love hardware, even though my knowledge of electronics is very limited.</p>
 
-<p>This demo site was last updated January 12, 2025.</p>
+<p>As a Linux user and enthusiast for 12 years, I have always seen the Linux kernel as a project that synthesizes all of these passions together. However, finding an entry point to study it—and the time to do so—was always a challenge. Given its niche nature, it took me a long time before I encountered people and study groups with similar interests… but that goal never left my mind.</p>
 
-<p>There are currently two themes built on Poole:</p>
+<p>Diving deeper into web development and decoupled code architectures, however, provided me with the foundation to begin understanding the various abstraction layers of the kernel and how they connect with one another—for instance, the relationship between the VFS (Virtual File System) and concrete file systems like Ext4 and Btrfs.</p>
 
-<ul>
-  <li><a href="http://hyde.getpoole.com">Hyde</a></li>
-  <li><a href="http://lanyon.getpoole.com">Lanyon</a></li>
-</ul>
+<p>It has been a long, somewhat solitary, and challenging journey to reach this milestone: my first contribution to the world’s largest open source project.</p>
 
-<p>Learn more and contribute on <a href="">GitHub</a>.</p>
+<h1 id="special-thanks">Special thanks</h1>
 
-<h2 id="whats-included">What’s included</h2>
+<p>I would like to express my gratitude to the folks at <a href="https://flusp.ime.usp.br">FLUSP</a> from the University of São Paulo, who welcomed me into their Linux kernel development workshop. I had the opportunity to meet these inspiring people only after moving to São Paulo, near USP, where we have the <a href="https://ccsl.ime.usp.br/en">CCSL</a>, the Free Software Competence Center.</p>
 
-<p>Poole is a streamlined Jekyll site designed and built as a foundation for building more meaningful themes. Poole, and every theme built on it like this one, includes the following:</p>
+<p>Through FLUSP, I was introduced to the <a href="https://lkcamp.dev">LKCAMP</a> community - an equivalent study group at the University of Campinas (Unicamp). In their workshop, I learned the contribution process and gained invaluable experience in debugging the kernel.</p>
 
-<ul>
-  <li>Complete Jekyll setup included (layouts, config, <a href="/404.html">404</a>, <a href="/atom.xml">RSS feed</a>, posts, <a href="/archive">archive page</a>, and <a href="/about">example page</a>)</li>
-  <li>Mobile friendly design and development</li>
-  <li>Easily scalable text and component sizing with <code class="language-plaintext highlighter-rouge">rem</code> units in the CSS</li>
-  <li>Support for a wide gamut of HTML elements</li>
-  <li>Related posts (time-based, because Jekyll) below each post</li>
-  <li>Syntax highlighting, courtesy Jekyll’s built-in support for Rouge</li>
-</ul>
+<h1 id="syzbot">Syzbot</h1>
 
-<p>Additional features are available in individual themes.</p>
+<p>The most practical way to find bugs in the Linux kernel is through <a href="https://syzkaller.appspot.com/upstream">Syzbot</a>. Syzbot emerged as part of the syzkaller project, a <a href="https://en.wikipedia.org/wiki/Fuzzing?wprov=sfla1">fuzzer</a> developed by Google to find bugs in the Linux kernel and other operating systems. The syzkaller was first developed by Dmitry Vyukov, a software engineer at Google, and was designed to automatically generate and execute random system calls (syscalls) with the aim of identifying flaws such as use-after-free, out-of-bounds access and data races.</p>
 
-<h2 id="browser-support">Browser support</h2>
+<h1 id="the-bug">The bug</h1>
 
-<p>Poole and its themes are by preference a forward-thinking project. In addition to the latest versions of Chrome, Safari (mobile and desktop), Firefox, and Edge.</p>
+<p>First, let’s analyze the top of the stack trace provided by the crash report of the <a href="https://syzkaller.appspot.com/bug?extid=9c9179ac46169c56c1ad">bug</a>, highlighting the lines that matter most:</p>
 
-<h2 id="download">Download</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
+Call Trace:
+ &lt;TASK&gt;
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:378 [inline]
+ print_report+0xc3/0x620 mm/kasan/report.c:489
+ kasan_report+0xd9/0x110 mm/kasan/report.c:602
+ usb_check_int_endpoints+0x247/0x270 drivers/usb/core/usb.c:277 &lt;---
+ thrustmaster_interrupts drivers/hid/hid-thrustmaster.c:176 [inline] &lt;---
+ thrustmaster_probe drivers/hid/hid-thrustmaster.c:347 [inline]
+ thrustmaster_probe+0x499/0xe10 drivers/hid/hid-thrustmaster.c:289
+ __hid_device_probe drivers/hid/hid-core.c:2713 [inline]
+ hid_device_probe+0x349/0x700 drivers/hid/hid-core.c:2750
+ ...
+ &lt;/TASK&gt;
+ ...
+</code></pre></div></div>
 
-<p>These themes are developed on and hosted with GitHub. Head to the <a href="">GitHub repository</a> for downloads, bug reports, and features requests.</p>
+<p>Syzkaller encountered a stack-out-of-bounds read in the driver module for the Thrustmaster joystick. A stack-out-of-bounds read occurs when a program tries to access memory outside the allocated stack range.</p>
 
-<p>Thanks!</p>
+<h2 id="1-the-reproducer-program">1. The reproducer program</h2>
+
+<p>The syzkaller may or may not generate a reproducer program for a bug, provided as a C source file (<code class="language-plaintext highlighter-rouge">repro.c</code>). Whether a reproducer program is generated depends on the nature of the bug. If all the reproduction conditions are clear and can be tracked by the fuzzer - allowing a well-defined reproduction path - the syzkaller system will generate a repro.c file for that bug.</p>
+
+<p>In some cases, however, things are less straightforward. Certain bugs arise in non-deterministic scenarios, such as specific memory states, race conditions, uninitialized memory, or heap corruptions. In these cases, a simple syscall sequence might not be enough to trigger the issue consistently.</p>
+
+<p>Fortunately, that wasn’t the case here. This can easily be triggered through its repro program. You can see the crash through the <a href="https://syzkaller.appspot.com/text?tag=CrashLog&amp;x=13786e24580000">crash log</a> provided by Syzbot.</p>
+
+<h2 id="2-analysis">2. Analysis</h2>
+
+<p>In fact, the problematic code was not in the core USB driver itself, but in <code class="language-plaintext highlighter-rouge">drivers/hid/hid-thrustmaster.c</code>, the HID (Human Interface Device) driver for Thrustmaster joysticks. Essentially, an HID driver is responsible for handling input from devices — such as keyboards, mice, and joysticks — by interpreting raw hardware signals and converting them into standardized events that the operating system can process.</p>
+
+<p>At a certain point, the HID driver code calls <code class="language-plaintext highlighter-rouge">the usb_check_int_endpoints</code> function from <code class="language-plaintext highlighter-rouge">drivers/usb/core/usb.c</code> within the USB subsystem, passing it the <code class="language-plaintext highlighter-rouge">ep_addr</code> array, which contains a single USB endpoint. USB endpoints are communication channels on a USB device through which data is transferred between the host and the device. They are characterized by their direction (IN/OUT) and type (e.g., control, bulk, interrupt, or isochronous). The role of this function is to validate the array of endpoints, ensuring that each endpoint is correctly configured for interrupt transfers.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// drivers/hid/hid-thrustmaster.c
+
+...
+ep = &amp;usbif-&gt;cur_altsetting-&gt;endpoint[1];
+b_ep = ep-&gt;desc.bEndpointAddress;
+
+u8 ep_addr[1] = {b_ep};
+
+if (!usb_check_int_endpoints(usbif, ep_addr)) {
+    hid_err(hdev, "Unexpected non-int endpoint\n");
+    return;
+}
+...
+</code></pre></div></div>
+
+<p>The issue is that <code class="language-plaintext highlighter-rouge">usb_check_int_endpoints</code> iterates over the passed array using a for loop to process each element, leading to a kernel panic.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// drivers/usb/core/usb.c
+
+bool usb_check_int_endpoints(
+		const struct usb_interface *intf, const u8 *ep_addrs)
+{
+	const struct usb_host_endpoint *ep;
+
+    // The for loop iterates to a next, non-existent element of ep_addrs
+	for (; *ep_addrs; ++ep_addrs) {
+		ep = usb_find_endpoint(intf, *ep_addrs);
+		if (!ep || !usb_endpoint_xfer_int(&amp;ep-&gt;desc))
+			return false;
+	}
+	return true;
+}
+EXPORT_SYMBOL_GPL(usb_check_int_endpoints);
+</code></pre></div></div>
+
+<p>By debugging this through QEMU and gdb, I noticed that the sole element in <code class="language-plaintext highlighter-rouge">ep_addr</code> was not null:</p>
+
+<p><img src="/assets/2025-02-19/gdb.png" alt="Print" /></p>
+
+<p>So, what else could lead to a crash? After all, the array contains a valid element, right? Well…</p>
+
+<p>First of all, please note that this is not a conventional for loop, as it does not use a dedicated counter variable like <code class="language-plaintext highlighter-rouge">i</code> to track the array size. Instead, it iterates by pre-incrementing directly over the elements of the passed array, whose size is unknown—remember, the USB subsystem doesn’t know in advance how many endpoints each USB device has, since its purpose is to be device-agnostic abstraction layer, and flexible enough to support a wide variety of endpoint configurations. <strong>Without a control variable, the loop can only determine when to stop iterating if it encounters a sentinel value—in this case, a null element—that represents the end of the array.</strong></p>
+
+<p>Considering the context of kernel software, where every byte matters, optimization and efficiency are critical. In the kernel context, even a minor overhead can be significant, which is why techniques such as using sentinel values instead of explicit counters are sometimes preferred. However, this approach relies on the array being properly terminated. If the sentinel value is missing, the loop will continue past the array’s bounds, leading to undefined behavior and, as observed here, a kernel crash.</p>
+
+<h2 id="3-the-fix">3. The fix</h2>
+
+<p>As we saw, the problem was that the outer endpoint array did not contain a null terminating value. The solution I found was to simply null-terminate the array by adding an extra zero element.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// drivers/hid/hid-thrustmaster.c
+
+...
+u8 ep_addr[1] = {b_ep, 0};
+
+if (!usb_check_int_endpoints(usbif, ep_addr)) {
+    hid_err(hdev, "Unexpected non-int endpoint\n");
+    return;
+}
+...
+</code></pre></div></div>
+
+<p>This way, the for loop in <code class="language-plaintext highlighter-rouge">usb.c</code> correctly recognizes the end of the array, preventing it from iterating beyond its valid elements.</p>
+
+<h2 id="4-testing">4. Testing</h2>
+
+<p>After applying my solution, I recompiled the kernel, booted it in QEMU, and executed the repro program again. Voilà: the kernel panic no longer occurred! You can check the <a href="https://syzkaller.appspot.com/x/log.txt?x=13c26eb0580000">logs</a> directly from Syzbot.</p>
+
+<p>In some cases, testing may require more thorough analysis than simply verifying that the repro program no longer crashes, but for this bug, that was sufficient.</p>
+
+<h1 id="submission-process">Submission process</h1>
+
+<h2 id="1-sending-the-patch">1. Sending the patch</h2>
+
+<p>On February 5th, 2025, after applying and testing my solution, I generated a patch file using the <code class="language-plaintext highlighter-rouge">git format-patch</code> command, ensuring that the commit title and description were appropriately detailed and standardized.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>From 6515fc6350d3997bc883c062aca3af2eecc93a12 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?T=C3=BAlio=20Fernandes?= &lt;tulio@localhost.localdomain&gt;
+Date: Sun, 2 Feb 2025 21:58:30 -0300
+Subject: [PATCH] HID: hid-thrustmaster: fix stack-out-of-bounds read in
+ usb_check_int_endpoints by null-terminating array
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Túlio Fernandes &lt;tulio@localhost.localdomain&gt;
+---
+ drivers/hid/hid-thrustmaster.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hid/hid-thrustmaster.c b/drivers/hid/hid-thrustmaster.c
+index 6c3e758bbb09..3b81468a1df2 100644
+--- a/drivers/hid/hid-thrustmaster.c
++++ b/drivers/hid/hid-thrustmaster.c
+@@ -171,7 +171,7 @@ static void thrustmaster_interrupts(struct hid_device *hdev)
+ 	b_ep = ep-&gt;desc.bEndpointAddress;
+ 
+ 	/* Are the expected endpoints present? */
+-	u8 ep_addr[1] = {b_ep};
++	u8 ep_addr[2] = {b_ep, 0};
+ 
+ 	if (!usb_check_int_endpoints(usbif, ep_addr)) {
+ 		hid_err(hdev, "Unexpected non-int endpoint\n");
+-- 
+2.48.1
+</code></pre></div></div>
+
+<p>Then, using the <code class="language-plaintext highlighter-rouge">git send-mail</code> utility, I sent the patch to the maintainers responsible for the modified file. You can easily find their email addresses using the <code class="language-plaintext highlighter-rouge">scripts/get_maintainer.pl</code> script.</p>
+
+<h2 id="2-lore">2. Lore</h2>
+
+<p>You can follow the entire discussion regarding this submission via this <a href="https://lore.kernel.org/linux-input/no7277o4-3964-4s97-0r95-154rr6rn4r88@xreary.bet/T/#t">link</a> on Kernel Lore. Lore is a public mailing list archive on the official Linux kernel website where everyone can follow the discussion, provide feedback, and gain insights into the contribution process. There, you will also find the commit details, including its title and a detailed description.</p>
+
+<h2 id="3-review-and-acceptance">3. Review and acceptance</h2>
+
+<p>On February 7th, my patch was merged into the HID tree by its maintainer, <a href="https://www.linux.com/news/30-linux-kernel-developers-30-weeks-jiri-kosina/">Jiří Kosina</a> (SUSE Labs). Then, on February 17th, the patch was submitted for review by <a href="https://theorg.com/org/the-linux-foundation/org-chart/sasha-levin">Sasha Levin</a> (NVidia) for inclusion in the stable/LTS branch—designed for long-term support—and, around the same time, <a href="https://en.wikipedia.org/wiki/Greg_Kroah-Hartman">Greg Kroah-Hartman</a> submitted it for the 6.1-stable branch, which is the next version-specific stable tree.</p>
+
+<p>In summary, the 6.1-stable branch (maintained by Greg Kroah-Hartman) receives new, thoroughly tested patches for upcoming releases, while the stable/LTS branch (managed by Sasha Levin) ensures that critical fixes are available in long-term supported kernel versions.</p>
+
+<h1 id="next-steps">Next steps</h1>
+
+<p>From this point forward, I plan to continue actively contributing to the Linux kernel, further expanding my knowledge and skills in low-level development. At the same time, I am looking to identify a kernel subsystem that truly captures my interest, so that I can dive deeper and specialize. I believe that with this focused approach, I can offer more significant contributions and keep a close eye on the evolutions and challenges in this fascinating field.</p>
+
+<h1 id="final-considerations">Final considerations</h1>
+
+<p>Reaching this milestone – my first contribution to the Linux kernel – fills me with a profound sense of accomplishment. Every step of this journey, including the setbacks and victories, has been a valuable learning experience, marked by persistence and passion. Reflecting on this achievement, I recognize it as one of the most significant goals I’ve reached in my career.</p>
+
+<p>I also hope that my journey serves as an invitation to anyone who, out of fear or guilt, feels constrained from exploring new technical areas beyond their current expertise. If you have an interest or passion for a field outside your main area of work, know that dedicating time to broaden your horizons is not only possible but incredibly rewarding. Every small step is part of a much larger journey. Keep exploring, learning, challenging yourself, and enjoying the process—because the world of technology is vast and full of opportunities waiting to be discovered.</p>
+
+<p>Thank you ; )</p>
 
   </article>
   
@@ -110,7 +258,7 @@
 
 <div class="pagination">
   
-    <a class="pagination-item older" href="/page2">Older</a>
+    <span class="pagination-item older">Older</span>
   
   
     <span class="pagination-item newer">Newer</span>
@@ -122,7 +270,7 @@
       <footer class="footer">
         <small>
           &copy;
-          <time datetime="2025-01-12T14:52:34-03:00"
+          <time datetime="2025-02-20T12:41:34-03:00"
             >2025</time
           >. All rights reserved.
         </small>
