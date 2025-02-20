@@ -3,8 +3,8 @@
 
  <title>Túlio Fernandes</title>
  <link href="/atom.xml" rel="self"/>
- <link href="http://localhost:4000/"/>
- <updated>2025-01-12T14:52:34-03:00</updated>
+ <link href="http://localhost:4000//"/>
+ <updated>2025-02-20T12:36:34-03:00</updated>
  <id>http://localhost:4000</id>
  <author>
    <name>Túlio Fernandes</name>
@@ -13,423 +13,200 @@
 
  
  <entry>
-   <title>Introduction</title>
-   <link href="http://localhost:4000/2020/04/04/introduction/"/>
-   <updated>2020-04-04T00:00:00-03:00</updated>
-   <id>http://localhost:4000/2020/04/04/introduction</id>
-   <content type="html">&lt;p&gt;&lt;em&gt;The Strange Case of Dr. Jekyll and Mr. Hyde&lt;/em&gt; tells the story of a lawyer investigating the connection of two persons, Dr. Henry Jekyll and Mr. Edward Hyde. Chief among the novel’s supporting cast is a man by the name of Mr. Poole, Dr. Jekyll’s loyal butler.&lt;/p&gt;
+   <title>The story behind my first contribution to the Linux kernel</title>
+   <link href="http://localhost:4000//linux/2025/02/19/first-contribution-linux/"/>
+   <updated>2025-02-19T10:14:20-03:00</updated>
+   <id>http://localhost:4000/linux/2025/02/19/first-contribution-linux</id>
+   <content type="html">&lt;p&gt;&lt;strong&gt;Attention: this is not a tutorial&lt;/strong&gt;. This post combines technical approach and personal narrative. Steps like QEMU setup, debostrapping and kernel compiling are not being covered here. For this I suggest this excellent &lt;a href=&quot;https://hackerbikepacker.com/syzbot&quot;&gt;article&lt;/a&gt; from Javier Carrasco Cruz.&lt;/p&gt;
 
-&lt;hr /&gt;
+&lt;h1 id=&quot;prologue&quot;&gt;Prologue&lt;/h1&gt;
 
-&lt;p&gt;Poole is the butler for &lt;a href=&quot;http://jekyllrb.com&quot;&gt;Jekyll&lt;/a&gt;, the static site generator. It’s designed and developed by &lt;a href=&quot;https://twitter.com/mdo&quot;&gt;@mdo&lt;/a&gt; to provide a clear and concise foundational setup for any Jekyll site. It does so by furnishing a full vanilla Jekyll install with example layouts, pages, posts, and styles.&lt;/p&gt;
+&lt;p&gt;Although I have been working in web development for the past six years and understand its challenges, I never found it particularly playful—please don’t misunderstand me, web colleagues; it’s simply a matter of personal preference. My true passions in computing have always been programming and operating systems—especially UNIX-based ones—and I have long been obsessed with the idea of uniting these two realms, whether professionally or as a hobby. I also love hardware, even though my knowledge of electronics is very limited.&lt;/p&gt;
 
-&lt;p&gt;This demo site was last updated January 12, 2025.&lt;/p&gt;
+&lt;p&gt;As a Linux user and enthusiast for 12 years, I have always seen the Linux kernel as a project that synthesizes all of these passions together. However, finding an entry point to study it—and the time to do so—was always a challenge. Given its niche nature, it took me a long time before I encountered people and study groups with similar interests… but that goal never left my mind.&lt;/p&gt;
 
-&lt;p&gt;There are currently two themes built on Poole:&lt;/p&gt;
+&lt;p&gt;Diving deeper into web development and decoupled code architectures, however, provided me with the foundation to begin understanding the various abstraction layers of the kernel and how they connect with one another—for instance, the relationship between the VFS (Virtual File System) and concrete file systems like Ext4 and Btrfs.&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://hyde.getpoole.com&quot;&gt;Hyde&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://lanyon.getpoole.com&quot;&gt;Lanyon&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;It has been a long, somewhat solitary, and challenging journey to reach this milestone: my first contribution to the world’s largest open source project.&lt;/p&gt;
 
-&lt;p&gt;Learn more and contribute on &lt;a href=&quot;&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;special-thanks&quot;&gt;Special thanks&lt;/h1&gt;
 
-&lt;h2 id=&quot;whats-included&quot;&gt;What’s included&lt;/h2&gt;
+&lt;p&gt;I would like to express my gratitude to the folks at &lt;a href=&quot;https://flusp.ime.usp.br&quot;&gt;FLUSP&lt;/a&gt; from the University of São Paulo, who welcomed me into their Linux kernel development workshop. I had the opportunity to meet these inspiring people only after moving to São Paulo, near USP, where we have the &lt;a href=&quot;https://ccsl.ime.usp.br/en&quot;&gt;CCSL&lt;/a&gt;, the Free Software Competence Center.&lt;/p&gt;
 
-&lt;p&gt;Poole is a streamlined Jekyll site designed and built as a foundation for building more meaningful themes. Poole, and every theme built on it like this one, includes the following:&lt;/p&gt;
+&lt;p&gt;Through FLUSP, I was introduced to the &lt;a href=&quot;https://lkcamp.dev&quot;&gt;LKCAMP&lt;/a&gt; community - an equivalent study group at the University of Campinas (Unicamp). In their workshop, I learned the contribution process and gained invaluable experience in debugging the kernel.&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;Complete Jekyll setup included (layouts, config, &lt;a href=&quot;/404.html&quot;&gt;404&lt;/a&gt;, &lt;a href=&quot;/atom.xml&quot;&gt;RSS feed&lt;/a&gt;, posts, &lt;a href=&quot;/archive&quot;&gt;archive page&lt;/a&gt;, and &lt;a href=&quot;/about&quot;&gt;example page&lt;/a&gt;)&lt;/li&gt;
-  &lt;li&gt;Mobile friendly design and development&lt;/li&gt;
-  &lt;li&gt;Easily scalable text and component sizing with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rem&lt;/code&gt; units in the CSS&lt;/li&gt;
-  &lt;li&gt;Support for a wide gamut of HTML elements&lt;/li&gt;
-  &lt;li&gt;Related posts (time-based, because Jekyll) below each post&lt;/li&gt;
-  &lt;li&gt;Syntax highlighting, courtesy Jekyll’s built-in support for Rouge&lt;/li&gt;
-&lt;/ul&gt;
+&lt;h1 id=&quot;syzbot&quot;&gt;Syzbot&lt;/h1&gt;
 
-&lt;p&gt;Additional features are available in individual themes.&lt;/p&gt;
+&lt;p&gt;The most practical way to find bugs in the Linux kernel is through &lt;a href=&quot;https://syzkaller.appspot.com/upstream&quot;&gt;Syzbot&lt;/a&gt;. Syzbot emerged as part of the syzkaller project, a &lt;a href=&quot;https://en.wikipedia.org/wiki/Fuzzing?wprov=sfla1&quot;&gt;fuzzer&lt;/a&gt; developed by Google to find bugs in the Linux kernel and other operating systems. The syzkaller was first developed by Dmitry Vyukov, a software engineer at Google, and was designed to automatically generate and execute random system calls (syscalls) with the aim of identifying flaws such as use-after-free, out-of-bounds access and data races.&lt;/p&gt;
 
-&lt;h2 id=&quot;browser-support&quot;&gt;Browser support&lt;/h2&gt;
+&lt;h1 id=&quot;the-bug&quot;&gt;The bug&lt;/h1&gt;
 
-&lt;p&gt;Poole and its themes are by preference a forward-thinking project. In addition to the latest versions of Chrome, Safari (mobile and desktop), Firefox, and Edge.&lt;/p&gt;
+&lt;p&gt;First, let’s analyze the top of the stack trace provided by the crash report of the &lt;a href=&quot;https://syzkaller.appspot.com/bug?extid=9c9179ac46169c56c1ad&quot;&gt;bug&lt;/a&gt;, highlighting the lines that matter most:&lt;/p&gt;
 
-&lt;h2 id=&quot;download&quot;&gt;Download&lt;/h2&gt;
-
-&lt;p&gt;These themes are developed on and hosted with GitHub. Head to the &lt;a href=&quot;&quot;&gt;GitHub repository&lt;/a&gt; for downloads, bug reports, and features requests.&lt;/p&gt;
-
-&lt;p&gt;Thanks!&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Options</title>
-   <link href="http://localhost:4000/2020/04/03/options/"/>
-   <updated>2020-04-03T00:00:00-03:00</updated>
-   <id>http://localhost:4000/2020/04/03/options</id>
-   <content type="html">&lt;p&gt;With Poole as a baseline theme for Jekyll, there aren’t many options available out of the box. Basic light and dark mode support is included. Colors are also provided for your own customization, while other Poole themes build on this to create more unique looks.&lt;/p&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#dark-mode&quot; id=&quot;markdown-toc-dark-mode&quot;&gt;Dark mode&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#creating-themes&quot; id=&quot;markdown-toc-creating-themes&quot;&gt;Creating themes&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#colors&quot; id=&quot;markdown-toc-colors&quot;&gt;Colors&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#gray-colors&quot; id=&quot;markdown-toc-gray-colors&quot;&gt;Gray colors&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#google-analytics&quot; id=&quot;markdown-toc-google-analytics&quot;&gt;Google Analytics&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;dark-mode&quot;&gt;Dark mode&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Dark mode is enabled automatically&lt;/strong&gt; via CSS media query—you’ll find the source code for this in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_sass/_variables.scss&lt;/code&gt; stylesheet. If you’re familiar with CSS custom properties, you can also use this method to build your own color schemes.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://markdotto.com/2018/11/05/css-dark-mode/&quot;&gt;Read more about using CSS dark mode&lt;/a&gt; via media queries like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-scss highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// Example media query to detect dark mode&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;@media&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prefers-color-scheme&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dark&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...
+Call Trace:
+ &amp;lt;TASK&amp;gt;
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:378 [inline]
+ print_report+0xc3/0x620 mm/kasan/report.c:489
+ kasan_report+0xd9/0x110 mm/kasan/report.c:602
+ usb_check_int_endpoints+0x247/0x270 drivers/usb/core/usb.c:277 &amp;lt;---
+ thrustmaster_interrupts drivers/hid/hid-thrustmaster.c:176 [inline] &amp;lt;---
+ thrustmaster_probe drivers/hid/hid-thrustmaster.c:347 [inline]
+ thrustmaster_probe+0x499/0xe10 drivers/hid/hid-thrustmaster.c:289
+ __hid_device_probe drivers/hid/hid-core.c:2713 [inline]
+ hid_device_probe+0x349/0x700 drivers/hid/hid-core.c:2750
+ ...
+ &amp;lt;/TASK&amp;gt;
+ ...
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;creating-themes&quot;&gt;Creating themes&lt;/h2&gt;
+&lt;p&gt;Syzkaller encountered a stack-out-of-bounds read in the driver module for the Thrustmaster joystick. A stack-out-of-bounds read occurs when a program tries to access memory outside the allocated stack range.&lt;/p&gt;
 
-&lt;p&gt;If you want to make your own color schemes, modify the CSS variables in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_sass/_variables.scss&lt;/code&gt; stylesheet with a scoped data attribute or class name.&lt;/p&gt;
+&lt;h2 id=&quot;1-the-reproducer-program&quot;&gt;1. The reproducer program&lt;/h2&gt;
 
-&lt;p&gt;For example, below we’ve created the beginnings of a blue theme:&lt;/p&gt;
+&lt;p&gt;The syzkaller may or may not generate a reproducer program for a bug, provided as a C source file (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;repro.c&lt;/code&gt;). Whether a reproducer program is generated depends on the nature of the bug. If all the reproduction conditions are clear and can be tracked by the fuzzer - allowing a well-defined reproduction path - the syzkaller system will generate a repro.c file for that bug.&lt;/p&gt;
 
-&lt;div class=&quot;language-scss highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// Example blue theme&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;data-theme&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;blue&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;--body-bg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;var&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;blue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;--body-color&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;#fff&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;p&gt;In some cases, however, things are less straightforward. Certain bugs arise in non-deterministic scenarios, such as specific memory states, race conditions, uninitialized memory, or heap corruptions. In these cases, a simple syscall sequence might not be enough to trigger the issue consistently.&lt;/p&gt;
+
+&lt;p&gt;Fortunately, that wasn’t the case here. This can easily be triggered through its repro program. You can see the crash through the &lt;a href=&quot;https://syzkaller.appspot.com/text?tag=CrashLog&amp;amp;x=13786e24580000&quot;&gt;crash log&lt;/a&gt; provided by Syzbot.&lt;/p&gt;
+
+&lt;h2 id=&quot;2-analysis&quot;&gt;2. Analysis&lt;/h2&gt;
+
+&lt;p&gt;In fact, the problematic code was not in the core USB driver itself, but in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;drivers/hid/hid-thrustmaster.c&lt;/code&gt;, the HID (Human Interface Device) driver for Thrustmaster joysticks. Essentially, an HID driver is responsible for handling input from devices — such as keyboards, mice, and joysticks — by interpreting raw hardware signals and converting them into standardized events that the operating system can process.&lt;/p&gt;
+
+&lt;p&gt;At a certain point, the HID driver code calls &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;the usb_check_int_endpoints&lt;/code&gt; function from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;drivers/usb/core/usb.c&lt;/code&gt; within the USB subsystem, passing it the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ep_addr&lt;/code&gt; array, which contains a single USB endpoint. USB endpoints are communication channels on a USB device through which data is transferred between the host and the device. They are characterized by their direction (IN/OUT) and type (e.g., control, bulk, interrupt, or isochronous). The role of this function is to validate the array of endpoints, ensuring that each endpoint is correctly configured for interrupt transfers.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// drivers/hid/hid-thrustmaster.c
+
+...
+ep = &amp;amp;usbif-&amp;gt;cur_altsetting-&amp;gt;endpoint[1];
+b_ep = ep-&amp;gt;desc.bEndpointAddress;
+
+u8 ep_addr[1] = {b_ep};
+
+if (!usb_check_int_endpoints(usbif, ep_addr)) {
+    hid_err(hdev, &quot;Unexpected non-int endpoint\n&quot;);
+    return;
+}
+...
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Then, apply the theme by adding &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;data-theme=&quot;blue&quot;&lt;/code&gt; to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;html&amp;gt;&lt;/code&gt; element.&lt;/p&gt;
+&lt;p&gt;The issue is that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;usb_check_int_endpoints&lt;/code&gt; iterates over the passed array using a for loop to process each element, leading to a kernel panic.&lt;/p&gt;
 
-&lt;h2 id=&quot;colors&quot;&gt;Colors&lt;/h2&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// drivers/usb/core/usb.c
 
-&lt;p&gt;Change your site styles by modifying the source code with these CSS custom properties. Poole’s colors come from the &lt;a href=&quot;https://yeun.github.io/open-color/&quot;&gt;Open Color project&lt;/a&gt;.&lt;/p&gt;
+bool usb_check_int_endpoints(
+		const struct usb_interface *intf, const u8 *ep_addrs)
+{
+	const struct usb_host_endpoint *ep;
 
-&lt;dl class=&quot;colors&quot;&gt;
-  &lt;dt style=&quot;background-color: #fa5252;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--red)&lt;/strong&gt;&lt;br /&gt;
-    #fa5252
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #e64980;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--pink)&lt;/strong&gt;&lt;br /&gt;
-    #e64980
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #be4bdb;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--grape)&lt;/strong&gt;&lt;br /&gt;
-    #be4bdb
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #7950f2;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--purple)&lt;/strong&gt;&lt;br /&gt;
-    #7950f2
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #4c6ef5;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--indigo)&lt;/strong&gt;&lt;br /&gt;
-    #4c6ef5
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #228be6;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--blue)&lt;/strong&gt;&lt;br /&gt;
-    #228be6
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #15aabf;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--cyan)&lt;/strong&gt;&lt;br /&gt;
-    #15aabf
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #12b886;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--teal)&lt;/strong&gt;&lt;br /&gt;
-    #12b886
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #40c057;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--green)&lt;/strong&gt;&lt;br /&gt;
-    #40c057
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #fab005;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--yellow)&lt;/strong&gt;&lt;br /&gt;
-    #fab005
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #fd7e14;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--orange)&lt;/strong&gt;&lt;br /&gt;
-    #fd7e14
-  &lt;/dd&gt;
-&lt;/dl&gt;
-
-&lt;h2 id=&quot;gray-colors&quot;&gt;Gray colors&lt;/h2&gt;
-
-&lt;p&gt;There are also ten grayscale colors to choose from.&lt;/p&gt;
-
-&lt;dl class=&quot;colors&quot;&gt;
-  &lt;dt style=&quot;background-color: #f8f9fa;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--gray-000)&lt;/strong&gt;&lt;br /&gt;
-    #f8f9fa
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #f1f3f5;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--gray-100)&lt;/strong&gt;&lt;br /&gt;
-    #f1f3f5
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #e9ecef;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--gray-200)&lt;/strong&gt;&lt;br /&gt;
-    #e9ecef
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #dee2e6;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--gray-300)&lt;/strong&gt;&lt;br /&gt;
-    #dee2e6
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #ced4da;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--gray-400)&lt;/strong&gt;&lt;br /&gt;
-    #ced4da
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #adb5bd;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--gray-500)&lt;/strong&gt;&lt;br /&gt;
-    #adb5bd
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #868e96;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--gray-600)&lt;/strong&gt;&lt;br /&gt;
-    #868e96
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #495057;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--gray-700)&lt;/strong&gt;&lt;br /&gt;
-    #495057
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #343a40;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--gray-800)&lt;/strong&gt;&lt;br /&gt;
-    #343a40
-  &lt;/dd&gt;
-  &lt;dt style=&quot;background-color: #212529;&quot;&gt;&lt;/dt&gt;
-  &lt;dd&gt;
-    &lt;strong&gt;var(--gray-900)&lt;/strong&gt;&lt;br /&gt;
-    #212529
-  &lt;/dd&gt;
-&lt;/dl&gt;
-
-&lt;h2 id=&quot;google-analytics&quot;&gt;Google Analytics&lt;/h2&gt;
-
-&lt;p&gt;Specify &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ga_analytics&lt;/code&gt; in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt; and restart the server to add Google Analytics tracking code.&lt;/p&gt;
-
-&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Google Analytics example&lt;/span&gt;
-&lt;span class=&quot;ss&quot;&gt;ga_analytics: &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;UA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mo&quot;&gt;000000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    // The for loop iterates to a next, non-existent element of ep_addrs
+	for (; *ep_addrs; ++ep_addrs) {
+		ep = usb_find_endpoint(intf, *ep_addrs);
+		if (!ep || !usb_endpoint_xfer_int(&amp;amp;ep-&amp;gt;desc))
+			return false;
+	}
+	return true;
+}
+EXPORT_SYMBOL_GPL(usb_check_int_endpoints);
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</content>
- </entry>
+
+&lt;p&gt;By debugging this through QEMU and gdb, I noticed that the sole element in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ep_addr&lt;/code&gt; was not null:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/2025-02-19/gdb.png&quot; alt=&quot;Print&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So, what else could lead to a crash? After all, the array contains a valid element, right? Well…&lt;/p&gt;
+
+&lt;p&gt;First of all, please note that this is not a conventional for loop, as it does not use a dedicated counter variable like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; to track the array size. Instead, it iterates by pre-incrementing directly over the elements of the passed array, whose size is unknown—remember, the USB subsystem doesn’t know in advance how many endpoints each USB device has, since its purpose is to be device-agnostic abstraction layer, and flexible enough to support a wide variety of endpoint configurations. &lt;strong&gt;Without a control variable, the loop can only determine when to stop iterating if it encounters a sentinel value—in this case, a null element—that represents the end of the array.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Considering the context of kernel software, where every byte matters, optimization and efficiency are critical. In the kernel context, even a minor overhead can be significant, which is why techniques such as using sentinel values instead of explicit counters are sometimes preferred. However, this approach relies on the array being properly terminated. If the sentinel value is missing, the loop will continue past the array’s bounds, leading to undefined behavior and, as observed here, a kernel crash.&lt;/p&gt;
+
+&lt;h2 id=&quot;3-the-fix&quot;&gt;3. The fix&lt;/h2&gt;
+
+&lt;p&gt;As we saw, the problem was that the outer endpoint array did not contain a null terminating value. The solution I found was to simply null-terminate the array by adding an extra zero element.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// drivers/hid/hid-thrustmaster.c
+
+...
+u8 ep_addr[1] = {b_ep, 0};
+
+if (!usb_check_int_endpoints(usbif, ep_addr)) {
+    hid_err(hdev, &quot;Unexpected non-int endpoint\n&quot;);
+    return;
+}
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This way, the for loop in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;usb.c&lt;/code&gt; correctly recognizes the end of the array, preventing it from iterating beyond its valid elements.&lt;/p&gt;
+
+&lt;h2 id=&quot;4-testing&quot;&gt;4. Testing&lt;/h2&gt;
+
+&lt;p&gt;After applying my solution, I recompiled the kernel, booted it in QEMU, and executed the repro program again. Voilà: the kernel panic no longer occurred! You can check the &lt;a href=&quot;https://syzkaller.appspot.com/x/log.txt?x=13c26eb0580000&quot;&gt;logs&lt;/a&gt; directly from Syzbot.&lt;/p&gt;
+
+&lt;p&gt;In some cases, testing may require more thorough analysis than simply verifying that the repro program no longer crashes, but for this bug, that was sufficient.&lt;/p&gt;
+
+&lt;h1 id=&quot;submission-process&quot;&gt;Submission process&lt;/h1&gt;
+
+&lt;h2 id=&quot;1-sending-the-patch&quot;&gt;1. Sending the patch&lt;/h2&gt;
+
+&lt;p&gt;On February 5th, 2025, after applying and testing my solution, I generated a patch file using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git format-patch&lt;/code&gt; command, ensuring that the commit title and description were appropriately detailed and standardized.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;From 6515fc6350d3997bc883c062aca3af2eecc93a12 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?T=C3=BAlio=20Fernandes?= &amp;lt;tulio@localhost.localdomain&amp;gt;
+Date: Sun, 2 Feb 2025 21:58:30 -0300
+Subject: [PATCH] HID: hid-thrustmaster: fix stack-out-of-bounds read in
+ usb_check_int_endpoints by null-terminating array
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Túlio Fernandes &amp;lt;tulio@localhost.localdomain&amp;gt;
+---
+ drivers/hid/hid-thrustmaster.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hid/hid-thrustmaster.c b/drivers/hid/hid-thrustmaster.c
+index 6c3e758bbb09..3b81468a1df2 100644
+--- a/drivers/hid/hid-thrustmaster.c
++++ b/drivers/hid/hid-thrustmaster.c
+@@ -171,7 +171,7 @@ static void thrustmaster_interrupts(struct hid_device *hdev)
+ 	b_ep = ep-&amp;gt;desc.bEndpointAddress;
  
- <entry>
-   <title>Example content</title>
-   <link href="http://localhost:4000/2020/04/02/example-content/"/>
-   <updated>2020-04-02T00:00:00-03:00</updated>
-   <id>http://localhost:4000/2020/04/02/example-content</id>
-   <content type="html">&lt;p class=&quot;message&quot;&gt;&lt;strong&gt;Howdy!&lt;/strong&gt; This is an example blog post that shows several types of HTML content supported in this theme.&lt;/p&gt;
-
-&lt;p&gt;Cum sociis natoque penatibus et magnis &lt;a href=&quot;#&quot;&gt;dis parturient montes&lt;/a&gt;, nascetur ridiculus mus. &lt;em&gt;Aenean eu leo quam.&lt;/em&gt; Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Etiam porta &lt;strong&gt;sem malesuada magna&lt;/strong&gt; mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.&lt;/p&gt;
-
-&lt;h2 id=&quot;inline-html-elements&quot;&gt;Inline HTML elements&lt;/h2&gt;
-
-&lt;p&gt;HTML defines a long list of available inline tags, a complete list of which can be found on the &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/HTML/Element&quot;&gt;Mozilla Developer Network&lt;/a&gt;.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;To bold text&lt;/strong&gt;, use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;strong&amp;gt;&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;em&gt;To italicize text&lt;/em&gt;, use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;em&amp;gt;&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;mark&gt;To highlight&lt;/mark&gt;, use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;mark&amp;gt;&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Abbreviations, like &lt;abbr title=&quot;HyperText Markup Langage&quot;&gt;HTML&lt;/abbr&gt; should use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;abbr&amp;gt;&lt;/code&gt;, with an optional &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;title&lt;/code&gt; attribute for the full phrase.&lt;/li&gt;
-  &lt;li&gt;Citations, like &lt;cite&gt;— Mark Otto&lt;/cite&gt;, should use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;cite&amp;gt;&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;del&gt;Deleted&lt;/del&gt; text should use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;del&amp;gt;&lt;/code&gt; and &lt;ins&gt;inserted&lt;/ins&gt; text should use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;ins&amp;gt;&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Superscript &lt;sup&gt;text&lt;/sup&gt; uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;sup&amp;gt;&lt;/code&gt; and subscript &lt;sub&gt;text&lt;/sub&gt; uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;sub&amp;gt;&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Most of these elements are styled by browsers with few modifications on our part.&lt;/p&gt;
-
-&lt;h2 id=&quot;footnotes&quot;&gt;Footnotes&lt;/h2&gt;
-
-&lt;p&gt;Footnotes are supported as part of the Markdown syntax. Here’s one in action. Clicking this number&lt;sup id=&quot;fnref:fn-sample_footnote&quot;&gt;&lt;a href=&quot;#fn:fn-sample_footnote&quot; class=&quot;footnote&quot; rel=&quot;footnote&quot; role=&quot;doc-noteref&quot;&gt;1&lt;/a&gt;&lt;/sup&gt; will lead you to a footnote. The syntax looks like:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;Clicking this number[^fn-sample_footnote]&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Each footnote needs the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;^fn-&lt;/code&gt; prefix and a unique ID to be referenced for the footnoted content. The syntax for that list looks something like this:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;[^fn-sample_footnote]: Handy! Now click the return link to go back.&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;You can place the footnoted content wherever you like. Markdown parsers should properly place it at the bottom of the post.&lt;/p&gt;
-
-&lt;h2 id=&quot;heading&quot;&gt;Heading&lt;/h2&gt;
-
-&lt;p&gt;Vivamus sagittis lacus vel augue rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.&lt;/p&gt;
-
-&lt;h3 id=&quot;code&quot;&gt;Code&lt;/h3&gt;
-
-&lt;p&gt;Inline code is available with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;code&amp;gt;&lt;/code&gt; element. Snippets of multiple lines of code are supported through Rouge. Longer lines will automatically scroll horizontally when needed. You may also use code fencing (triple backticks) for rendering code.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Example can be run directly in your JavaScript console&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// Create a function that takes two arguments and returns the sum of those arguments&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;adder&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;return a + b&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// Call the function&lt;/span&gt;
-&lt;span class=&quot;nf&quot;&gt;adder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// &amp;gt; 8&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;You may also optionally show code snippets with line numbers. Add &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;linenos&lt;/code&gt; to the Rouge tags.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-7
-8
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;// Example can be run directly in your JavaScript console&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// Create a function that takes two arguments and returns the sum of those arguments&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;adder&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;return a + b&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// Call the function&lt;/span&gt;
-&lt;span class=&quot;nf&quot;&gt;adder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// &amp;gt; 8&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.&lt;/p&gt;
-
-&lt;h3 id=&quot;gists-via-github-pages&quot;&gt;Gists via GitHub Pages&lt;/h3&gt;
-
-&lt;p&gt;Vestibulum id ligula porta felis euismod semper. Nullam quis risus eget urna mollis ornare vel eu leo. Donec sed odio dui.&lt;/p&gt;
-
-&lt;noscript&gt;&lt;pre&gt;400: Invalid request&lt;/pre&gt;&lt;/noscript&gt;
-&lt;script src=&quot;https://gist.github.com/13f94b734a4ddb132735.js?file=gist.md&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec sed odio dui. Vestibulum id ligula porta felis euismod semper.&lt;/p&gt;
-
-&lt;h3 id=&quot;lists&quot;&gt;Lists&lt;/h3&gt;
-
-&lt;p&gt;Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Praesent commodo cursus magna, vel scelerisque nisl consectetur et.&lt;/li&gt;
-  &lt;li&gt;Donec id elit non mi porta gravida at eget metus.&lt;/li&gt;
-  &lt;li&gt;Nulla vitae elit libero, a pharetra augue.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Vestibulum id ligula porta felis euismod semper.&lt;/li&gt;
-  &lt;li&gt;Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.&lt;/li&gt;
-  &lt;li&gt;Maecenas sed diam eget risus varius blandit sit amet non magna.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.&lt;/p&gt;
-
-&lt;dl&gt;
-  &lt;dt&gt;HyperText Markup Language (HTML)&lt;/dt&gt;
-  &lt;dd&gt;The language used to describe and define the content of a Web page&lt;/dd&gt;
-
-  &lt;dt&gt;Cascading Style Sheets (CSS)&lt;/dt&gt;
-  &lt;dd&gt;Used to describe the appearance of Web content&lt;/dd&gt;
-
-  &lt;dt&gt;JavaScript (JS)&lt;/dt&gt;
-  &lt;dd&gt;The programming language used to build advanced Web sites and applications&lt;/dd&gt;
-&lt;/dl&gt;
-
-&lt;p&gt;Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam quis risus eget urna mollis ornare vel eu leo.&lt;/p&gt;
-
-&lt;h3 id=&quot;images&quot;&gt;Images&lt;/h3&gt;
-
-&lt;p&gt;Quisque consequat sapien eget quam rhoncus, sit amet laoreet diam tempus. Aliquam aliquam metus erat, a pulvinar turpis suscipit at.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://placehold.it/800x400&quot; alt=&quot;placeholder&quot; title=&quot;Large example image&quot; /&gt;
-&lt;img src=&quot;http://placehold.it/400x200&quot; alt=&quot;placeholder&quot; title=&quot;Medium example image&quot; /&gt;
-&lt;img src=&quot;http://placehold.it/200x200&quot; alt=&quot;placeholder&quot; title=&quot;Small example image&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;tables&quot;&gt;Tables&lt;/h3&gt;
-
-&lt;p&gt;Aenean lacinia bibendum nulla sed consectetur. Lorem ipsum dolor sit amet, consectetur adipiscing elit.&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Name&lt;/th&gt;
-      &lt;th&gt;Upvotes&lt;/th&gt;
-      &lt;th&gt;Downvotes&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tfoot&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Totals&lt;/td&gt;
-      &lt;td&gt;21&lt;/td&gt;
-      &lt;td&gt;23&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tfoot&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Alice&lt;/td&gt;
-      &lt;td&gt;10&lt;/td&gt;
-      &lt;td&gt;11&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Bob&lt;/td&gt;
-      &lt;td&gt;4&lt;/td&gt;
-      &lt;td&gt;3&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Charlie&lt;/td&gt;
-      &lt;td&gt;7&lt;/td&gt;
-      &lt;td&gt;9&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur est at lobortis. Nullam quis risus eget urna mollis ornare vel eu leo.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;Want to see something else added? &lt;a href=&quot;https://github.com/poole/poole/issues/new&quot;&gt;Open an issue.&lt;/a&gt;&lt;/p&gt;
-
-&lt;div class=&quot;footnotes&quot; role=&quot;doc-endnotes&quot;&gt;
-  &lt;ol&gt;
-    &lt;li id=&quot;fn:fn-sample_footnote&quot;&gt;
-      &lt;p&gt;Handy! Now click the return link to go back. &lt;a href=&quot;#fnref:fn-sample_footnote&quot; class=&quot;reversefootnote&quot; role=&quot;doc-backlink&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-    &lt;/li&gt;
-  &lt;/ol&gt;
-&lt;/div&gt;
-</content>
- </entry>
+ 	/* Are the expected endpoints present? */
+-	u8 ep_addr[1] = {b_ep};
++	u8 ep_addr[2] = {b_ep, 0};
  
- <entry>
-   <title>What&apos;s Jekyll?</title>
-   <link href="http://localhost:4000/2020/03/01/whats-jekyll/"/>
-   <updated>2020-03-01T00:00:00-03:00</updated>
-   <id>http://localhost:4000/2020/03/01/whats-jekyll</id>
-   <content type="html">&lt;p&gt;&lt;a href=&quot;https://jekyllrb.com&quot;&gt;Jekyll&lt;/a&gt; is a static site generator, an open-source tool for creating simple yet powerful websites of all shapes and sizes. From &lt;a href=&quot;https://github.com/jekyll/jekyll/blob/master/README.markdown&quot;&gt;the project’s readme&lt;/a&gt;:&lt;/p&gt;
+ 	if (!usb_check_int_endpoints(usbif, ep_addr)) {
+ 		hid_err(hdev, &quot;Unexpected non-int endpoint\n&quot;);
+-- 
+2.48.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;Jekyll is a simple, blog aware, static site generator. It takes a template directory […] and spits out a complete, static website suitable for serving with Apache or your favorite web server. This is also the engine behind GitHub Pages, which you can use to host your project’s page or blog right here from GitHub.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;Then, using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git send-mail&lt;/code&gt; utility, I sent the patch to the maintainers responsible for the modified file. You can easily find their email addresses using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scripts/get_maintainer.pl&lt;/code&gt; script.&lt;/p&gt;
 
-&lt;p&gt;It’s an immensely useful tool. Find out more by &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;visiting the project on GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;2-lore&quot;&gt;2. Lore&lt;/h2&gt;
+
+&lt;p&gt;You can follow the entire discussion regarding this submission via this &lt;a href=&quot;https://lore.kernel.org/linux-input/no7277o4-3964-4s97-0r95-154rr6rn4r88@xreary.bet/T/#t&quot;&gt;link&lt;/a&gt; on Kernel Lore. Lore is a public mailing list archive on the official Linux kernel website where everyone can follow the discussion, provide feedback, and gain insights into the contribution process. There, you will also find the commit details, including its title and a detailed description.&lt;/p&gt;
+
+&lt;h2 id=&quot;3-review-and-acceptance&quot;&gt;3. Review and acceptance&lt;/h2&gt;
+
+&lt;p&gt;On February 7th, my patch was merged into the HID tree by its maintainer, &lt;a href=&quot;https://www.linux.com/news/30-linux-kernel-developers-30-weeks-jiri-kosina/&quot;&gt;Jiří Kosina&lt;/a&gt; (SUSE Labs). Then, on February 17th, the patch was submitted for review by &lt;a href=&quot;https://theorg.com/org/the-linux-foundation/org-chart/sasha-levin&quot;&gt;Sasha Levin&lt;/a&gt; (NVidia) for inclusion in the stable/LTS branch—designed for long-term support—and, around the same time, &lt;a href=&quot;https://en.wikipedia.org/wiki/Greg_Kroah-Hartman&quot;&gt;Greg Kroah-Hartman&lt;/a&gt; submitted it for the 6.1-stable branch, which is the next version-specific stable tree.&lt;/p&gt;
+
+&lt;p&gt;In summary, the 6.1-stable branch (maintained by Greg Kroah-Hartman) receives new, thoroughly tested patches for upcoming releases, while the stable/LTS branch (managed by Sasha Levin) ensures that critical fixes are available in long-term supported kernel versions.&lt;/p&gt;
+
+&lt;h1 id=&quot;next-steps&quot;&gt;Next steps&lt;/h1&gt;
+
+&lt;p&gt;From this point forward, I plan to continue actively contributing to the Linux kernel, further expanding my knowledge and skills in low-level development. At the same time, I am looking to identify a kernel subsystem that truly captures my interest, so that I can dive deeper and specialize. I believe that with this focused approach, I can offer more significant contributions and keep a close eye on the evolutions and challenges in this fascinating field.&lt;/p&gt;
+
+&lt;h1 id=&quot;final-considerations&quot;&gt;Final considerations&lt;/h1&gt;
+
+&lt;p&gt;Reaching this milestone – my first contribution to the Linux kernel – fills me with a profound sense of accomplishment. Every step of this journey, including the setbacks and victories, has been a valuable learning experience, marked by persistence and passion. Reflecting on this achievement, I recognize it as one of the most significant goals I’ve reached in my career.&lt;/p&gt;
+
+&lt;p&gt;I also hope that my journey serves as an invitation to anyone who, out of fear or guilt, feels constrained from exploring new technical areas beyond their current expertise. If you have an interest or passion for a field outside your main area of work, know that dedicating time to broaden your horizons is not only possible but incredibly rewarding. Every small step is part of a much larger journey. Keep exploring, learning, challenging yourself, and enjoying the process—because the world of technology is vast and full of opportunities waiting to be discovered.&lt;/p&gt;
+
+&lt;p&gt;Thank you ; )&lt;/p&gt;
 </content>
  </entry>
  
