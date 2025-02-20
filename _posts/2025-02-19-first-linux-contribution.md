@@ -123,7 +123,7 @@ Considering the context of kernel software, where every byte matters, optimizati
 
 ## 3. The fix
 
-As we saw, the problem was that the outer endpoint array did not contain a null terminating value. The solution I found was to simply null-terminate the array by adding an extra zero element.
+As we saw, the problem was that the outer endpoint array did not contain a null terminating value. **The solution I found was to simply null-terminate the array by adding an extra zero element.**
 
 ```
 // drivers/hid/hid-thrustmaster.c
