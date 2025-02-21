@@ -34,7 +34,7 @@ The most practical way to find bugs in the Linux kernel is through [Syzbot](http
 
 # The bug
 
-First, let's analyze the top of the stack trace provided by the crash report of the [bug](https://syzkaller.appspot.com/bug?extid=9c9179ac46169c56c1ad), highlighting the lines that matter most:
+First, let's analyze the top of the stack trace provided by the crash report of the [bug](https://syzkaller.appspot.com/bug?extid=9c9179ac46169c56c1ad), I chose, highlighting the lines that matter most:
 
 ```
 ...
@@ -56,7 +56,7 @@ Call Trace:
  ...
 ```
 
-Syzkaller encountered a stack-out-of-bounds read in the driver module for the Thrustmaster joystick. A stack-out-of-bounds read occurs when a program tries to access memory outside the allocated stack range.
+Syzkaller encountered a stack-out-of-bounds read in the driver module for Thrustmaster joysticks. A stack-out-of-bounds read occurs when a program tries to access memory outside the allocated stack range.
 
 ## 1. The reproducer program
 
@@ -64,14 +64,14 @@ The syzkaller may or may not generate a reproducer program for a bug, provided a
 
 In some cases, however, things are less straightforward. Certain bugs arise in non-deterministic scenarios, such as specific memory states, race conditions, uninitialized memory, or heap corruptions. In these cases, a simple syscall sequence might not be enough to trigger the issue consistently.
 
-Fortunately, that wasn’t the case here. This can easily be triggered through its repro program. You can see the crash through the [crash log](https://syzkaller.appspot.com/text?tag=CrashLog&x=13786e24580000) provided by Syzbot.
+Fortunately, that wasn’t the case here. This bug can easily be triggered through its repro program. Instead of showing you a print from my machine, You can see the entire crash through the [crash log](https://syzkaller.appspot.com/text?tag=CrashLog&x=13786e24580000) from the bug provided by Syzbot.
 
 
 ## 2. Analysis
 
 In fact, the problematic code was not in the core USB driver itself, but in `drivers/hid/hid-thrustmaster.c`, the HID (Human Interface Device) driver for Thrustmaster joysticks. Essentially, an HID driver is responsible for handling input from devices — such as keyboards, mice, and joysticks — by interpreting raw hardware signals and converting them into standardized events that the operating system can process.
 
-At a certain point, the HID driver code calls `the usb_check_int_endpoints` function from `drivers/usb/core/usb.c` within the USB subsystem, passing it the `ep_addr` array, which contains a single USB endpoint. USB endpoints are communication channels on a USB device through which data is transferred between the host and the device. They are characterized by their direction (IN/OUT) and type (e.g., control, bulk, interrupt, or isochronous). The role of this function is to validate the array of endpoints, ensuring that each endpoint is correctly configured for interrupt transfers.
+At a certain point, the HID driver code calls `the usb_check_int_endpoints` function from `drivers/usb/core/usb.c` within the USB subsystem, passing it the `ep_addr` array, which contains a single USB endpoint. USB endpoints are communication channels on a USB device through which data is transferred between the host and the device. They are characterized by their direction (IN/OUT) and type (e.g., control, bulk, interrupt, or isochronous). The role of this function is to validate the array of endpoints, ensuring that each endpoint is correctly configured for interrupt transfers. By the way, here's a good example of how the subsystems talk to each other.
 
 ```
 // drivers/hid/hid-thrustmaster.c
@@ -116,7 +116,7 @@ By debugging this through QEMU and gdb, I noticed that the sole element in `ep_a
 
 So, what else could lead to a crash? After all, the array contains a valid element, right? Well...
 
-First of all, please note that this is not a conventional for loop, as it does not use a dedicated counter variable like `i` to track the array size. Instead, it iterates by pre-incrementing directly over the elements of the passed array, whose size is unknown—remember, the USB subsystem doesn't know in advance how many endpoints each USB device has, since its purpose is to be device-agnostic abstraction layer, and flexible enough to support a wide variety of endpoint configurations. **Without a control variable, the loop can only determine when to stop iterating if it encounters a sentinel value—in this case, a null element—that represents the end of the array.**
+First of all, please note that this is not a conventional for loop, as it does not use a dedicated counter variable like `i` to track the array size. Instead, it iterates by pre-incrementing directly over the elements of the passed array, whose size is unknown—remember, the USB subsystem doesn't know in advance how many endpoints each USB device has, since its purpose is to be device-agnostic layer, and flexible enough to support a wide variety of endpoint configurations. **Without a control variable, the loop can only determine when to stop iterating if it encounters a sentinel value—in this case, a null element—that represents the end of the array.**
 
 Considering the context of kernel software, where every byte matters, optimization and efficiency are critical. In the kernel context, even a minor overhead can be significant, which is why techniques such as using sentinel values instead of explicit counters are sometimes preferred. However, this approach relies on the array being properly terminated. If the sentinel value is missing, the loop will continue past the array's bounds, leading to undefined behavior and, as observed here, a kernel crash.
 
@@ -144,7 +144,7 @@ This way, the for loop in `usb.c` correctly recognizes the end of the array, pre
 
 After applying my solution, I recompiled the kernel, booted it in QEMU, and executed the repro program again. Voilà: the kernel panic no longer occurred! You can check the [logs](https://syzkaller.appspot.com/x/log.txt?x=13c26eb0580000) directly from Syzbot.
 
-In some cases, testing may require more thorough analysis than simply verifying that the repro program no longer crashes, but for this bug, that was sufficient.
+In some cases, testing may require more thorough analysis than simply verifying that the repro program no longer crashes, but for this case, that was sufficient.
 
 # Submission process
 
@@ -192,17 +192,17 @@ You can follow the entire discussion regarding this submission via this [link](h
 
 ## 3. Review and acceptance
 
-On February 7th, my patch was merged into the HID tree by its maintainer, [Jiří Kosina](https://www.linux.com/news/30-linux-kernel-developers-30-weeks-jiri-kosina/) (SUSE Labs). Then, on February 17th, the patch was submitted for review by [Sasha Levin](https://theorg.com/org/the-linux-foundation/org-chart/sasha-levin) (NVidia) for inclusion in the stable/LTS branch—designed for long-term support—and, around the same time, [Greg Kroah-Hartman](https://en.wikipedia.org/wiki/Greg_Kroah-Hartman) submitted it for the 6.1-stable branch, which is the next version-specific stable tree.
+On February 7th, my patch was merged into the HID tree by its maintainer, [Jiří Kosina](https://www.linux.com/news/30-linux-kernel-developers-30-weeks-jiri-kosina/) (SUSE Labs). Then, on February 17th, the patch was submitted for review by [Sasha Levin](https://theorg.com/org/the-linux-foundation/org-chart/sasha-levin) (NVidia) for inclusion in the stable/LTS branch—designed for long-term support—and, around the same time, [Greg Kroah-Hartman](https://en.wikipedia.org/wiki/Greg_Kroah-Hartman) (The Linux Foundation) submitted it for the 6.1-stable branch, which is the next version-specific stable tree.
 
-In summary, the 6.1-stable branch (maintained by Greg Kroah-Hartman) receives new, thoroughly tested patches for upcoming releases, while the stable/LTS branch (managed by Sasha Levin) ensures that critical fixes are available in long-term supported kernel versions.
+In summary, the 6.1-stable branch (maintained by Greg Kroah-Hartman) receives new, thoroughly tested patches for upcoming releases, while the stable/LTS branch (managed by Sasha Levin) is for the next long-term supported kernel version.
 
 # Next steps
 
-From this point forward, I plan to continue actively contributing to the Linux kernel, further expanding my knowledge and skills in low-level development. At the same time, I am looking to identify a kernel subsystem that truly captures my interest, so that I can dive deeper and specialize. I believe that with this focused approach, I can offer more significant contributions and keep a close eye on the evolutions and challenges in this fascinating field.
+From this point forward, I plan to continue actively contributing to the Linux kernel, further expanding my knowledge and skills in low-level development. At the same time, I am looking to identify a kernel subsystem that truly captures my interest, so that I can dive deeper and specialize. I believe that with this focused approach, I can offer more significant contributions and keep a close eye on the evolutions and challenges in this field.
 
 # Final considerations
 
-Reaching this milestone – my first contribution to the Linux kernel – fills me with a profound sense of accomplishment. Every step of this journey, including the setbacks and victories, has been a valuable learning experience, marked by persistence and passion. Reflecting on this achievement, I recognize it as one of the most significant goals I've reached in my career.
+Reaching this milestone – my first contribution to the Linux kernel – fills me with a profound sense of accomplishment. Every step of this journey, including the setbacks and victories, has been a valuable learning experience, marked by persistence and passion. Reflecting on this achievement, I recognize it as one of the most significant goals I've reached in my IT life.
 
 I also hope that my journey serves as an invitation to anyone who, out of fear or guilt, feels constrained from exploring new technical areas beyond their current expertise. If you have an interest or passion for a field outside your main area of work, know that dedicating time to broaden your horizons is not only possible but incredibly rewarding. Every small step is part of a much larger journey. Keep exploring, learning, challenging yourself, and enjoying the process—because the world of technology is vast and full of opportunities waiting to be discovered.
 
