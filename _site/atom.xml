@@ -3,9 +3,9 @@
 
  <title>Túlio Fernandes</title>
  <link href="/atom.xml" rel="self"/>
- <link href="https://tuliofernandes.github.io//"/>
- <updated>2025-02-21T10:35:18-03:00</updated>
- <id>https://tuliofernandes.github.io</id>
+ <link href="http://localhost:4000//"/>
+ <updated>2025-02-21T11:58:44-03:00</updated>
+ <id>http://localhost:4000</id>
  <author>
    <name>Túlio Fernandes</name>
    <email>tuliomf09@gmail.com</email>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>The story behind my first contribution to the Linux kernel</title>
-   <link href="https://tuliofernandes.github.io//linux/2025/02/19/first-linux-contribution/"/>
+   <link href="http://localhost:4000//linux/2025/02/19/first-linux-contribution/"/>
    <updated>2025-02-19T10:14:20-03:00</updated>
-   <id>https://tuliofernandes.github.io/linux/2025/02/19/first-linux-contribution</id>
+   <id>http://localhost:4000/linux/2025/02/19/first-linux-contribution</id>
    <content type="html">&lt;p&gt;&lt;strong&gt;Attention: this is not a tutorial&lt;/strong&gt;. This post combines technical approach and personal narrative. Steps like QEMU setup, debostrapping and kernel compiling are not being covered here. For this I suggest this excellent &lt;a href=&quot;https://hackerbikepacker.com/syzbot&quot;&gt;article&lt;/a&gt; from Javier Carrasco Cruz.&lt;/p&gt;
 
 &lt;h1 id=&quot;prologue&quot;&gt;Prologue&lt;/h1&gt;
