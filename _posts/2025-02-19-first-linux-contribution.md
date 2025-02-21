@@ -3,12 +3,14 @@ layout: post
 title: 'The story behind my first contribution to the Linux kernel'
 tags: [linux, kernel, C, open source, bug]
 categories: [linux]
-date: 2025-02-19 13:14:20
+date: 2025-02-21 12:14:20
 #excerpt: ''
-#image: 'BASEURL/assets/blog/img/.png'
+#cover_image: /assets/2025-02-19/post-cover.webp
 #description:
 #permalink:
 ---
+
+![Print](/assets/2025-02-19/post-cover.webp)
 
 **Attention: this is not a tutorial**. This post combines technical approach and personal narrative. Steps like QEMU setup, debostrapping and kernel compiling are not being covered here. For this I suggest this excellent [article](https://hackerbikepacker.com/syzbot) from Javier Carrasco Cruz.
 
