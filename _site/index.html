@@ -20,14 +20,14 @@
 <meta property="og:title" content="Home" />
 <meta name="author" content="Túlio Fernandes" />
 <meta property="og:locale" content="en_US" />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
+<link rel="canonical" href="https://tuliofernandes.github.io/" />
+<meta property="og:url" content="https://tuliofernandes.github.io/" />
 <meta property="og:site_name" content="Túlio Fernandes" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Home" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","author":{"@type":"Person","name":"Túlio Fernandes","url":"https://tuliofernandes.github.io"},"headline":"Home","name":"Túlio Fernandes","url":"http://localhost:4000/"}</script>
+{"@context":"https://schema.org","@type":"WebSite","author":{"@type":"Person","name":"Túlio Fernandes","url":"https://tuliofernandes.github.io"},"headline":"Home","name":"Túlio Fernandes","url":"https://tuliofernandes.github.io/"}</script>
 <!-- End Jekyll SEO tag -->
 
 </head>
@@ -85,7 +85,7 @@
 
 <h1 id="the-bug">The bug</h1>
 
-<p>First, let’s analyze the top of the stack trace provided by the crash report of the <a href="https://syzkaller.appspot.com/bug?extid=9c9179ac46169c56c1ad">bug</a>, highlighting the lines that matter most:</p>
+<p>First, let’s analyze the top of the stack trace provided by the crash report of the <a href="https://syzkaller.appspot.com/bug?extid=9c9179ac46169c56c1ad">bug</a>, I chose, highlighting the lines that matter most:</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
 Call Trace:
@@ -106,7 +106,7 @@ Call Trace:
  ...
 </code></pre></div></div>
 
-<p>Syzkaller encountered a stack-out-of-bounds read in the driver module for the Thrustmaster joystick. A stack-out-of-bounds read occurs when a program tries to access memory outside the allocated stack range.</p>
+<p>Syzkaller encountered a stack-out-of-bounds read in the driver module for Thrustmaster joysticks. A stack-out-of-bounds read occurs when a program tries to access memory outside the allocated stack range.</p>
 
 <h2 id="1-the-reproducer-program">1. The reproducer program</h2>
 
@@ -114,13 +114,13 @@ Call Trace:
 
 <p>In some cases, however, things are less straightforward. Certain bugs arise in non-deterministic scenarios, such as specific memory states, race conditions, uninitialized memory, or heap corruptions. In these cases, a simple syscall sequence might not be enough to trigger the issue consistently.</p>
 
-<p>Fortunately, that wasn’t the case here. This can easily be triggered through its repro program. You can see the crash through the <a href="https://syzkaller.appspot.com/text?tag=CrashLog&amp;x=13786e24580000">crash log</a> provided by Syzbot.</p>
+<p>Fortunately, that wasn’t the case here. This bug can easily be triggered through its repro program. Instead of showing you a print from my machine, You can see the entire crash through the <a href="https://syzkaller.appspot.com/text?tag=CrashLog&amp;x=13786e24580000">crash log</a> from the bug provided by Syzbot.</p>
 
 <h2 id="2-analysis">2. Analysis</h2>
 
 <p>In fact, the problematic code was not in the core USB driver itself, but in <code class="language-plaintext highlighter-rouge">drivers/hid/hid-thrustmaster.c</code>, the HID (Human Interface Device) driver for Thrustmaster joysticks. Essentially, an HID driver is responsible for handling input from devices — such as keyboards, mice, and joysticks — by interpreting raw hardware signals and converting them into standardized events that the operating system can process.</p>
 
-<p>At a certain point, the HID driver code calls <code class="language-plaintext highlighter-rouge">the usb_check_int_endpoints</code> function from <code class="language-plaintext highlighter-rouge">drivers/usb/core/usb.c</code> within the USB subsystem, passing it the <code class="language-plaintext highlighter-rouge">ep_addr</code> array, which contains a single USB endpoint. USB endpoints are communication channels on a USB device through which data is transferred between the host and the device. They are characterized by their direction (IN/OUT) and type (e.g., control, bulk, interrupt, or isochronous). The role of this function is to validate the array of endpoints, ensuring that each endpoint is correctly configured for interrupt transfers.</p>
+<p>At a certain point, the HID driver code calls <code class="language-plaintext highlighter-rouge">the usb_check_int_endpoints</code> function from <code class="language-plaintext highlighter-rouge">drivers/usb/core/usb.c</code> within the USB subsystem, passing it the <code class="language-plaintext highlighter-rouge">ep_addr</code> array, which contains a single USB endpoint. USB endpoints are communication channels on a USB device through which data is transferred between the host and the device. They are characterized by their direction (IN/OUT) and type (e.g., control, bulk, interrupt, or isochronous). The role of this function is to validate the array of endpoints, ensuring that each endpoint is correctly configured for interrupt transfers. By the way, here’s a good example of how the subsystems talk to each other.</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// drivers/hid/hid-thrustmaster.c
 
@@ -163,13 +163,13 @@ EXPORT_SYMBOL_GPL(usb_check_int_endpoints);
 
 <p>So, what else could lead to a crash? After all, the array contains a valid element, right? Well…</p>
 
-<p>First of all, please note that this is not a conventional for loop, as it does not use a dedicated counter variable like <code class="language-plaintext highlighter-rouge">i</code> to track the array size. Instead, it iterates by pre-incrementing directly over the elements of the passed array, whose size is unknown—remember, the USB subsystem doesn’t know in advance how many endpoints each USB device has, since its purpose is to be device-agnostic abstraction layer, and flexible enough to support a wide variety of endpoint configurations. <strong>Without a control variable, the loop can only determine when to stop iterating if it encounters a sentinel value—in this case, a null element—that represents the end of the array.</strong></p>
+<p>First of all, please note that this is not a conventional for loop, as it does not use a dedicated counter variable like <code class="language-plaintext highlighter-rouge">i</code> to track the array size. Instead, it iterates by pre-incrementing directly over the elements of the passed array, whose size is unknown—remember, the USB subsystem doesn’t know in advance how many endpoints each USB device has, since its purpose is to be device-agnostic layer, and flexible enough to support a wide variety of endpoint configurations. <strong>Without a control variable, the loop can only determine when to stop iterating if it encounters a sentinel value—in this case, a null element—that represents the end of the array.</strong></p>
 
 <p>Considering the context of kernel software, where every byte matters, optimization and efficiency are critical. In the kernel context, even a minor overhead can be significant, which is why techniques such as using sentinel values instead of explicit counters are sometimes preferred. However, this approach relies on the array being properly terminated. If the sentinel value is missing, the loop will continue past the array’s bounds, leading to undefined behavior and, as observed here, a kernel crash.</p>
 
 <h2 id="3-the-fix">3. The fix</h2>
 
-<p>As we saw, the problem was that the outer endpoint array did not contain a null terminating value. The solution I found was to simply null-terminate the array by adding an extra zero element.</p>
+<p>As we saw, the problem was that the outer endpoint array did not contain a null terminating value. <strong>The solution I found was to simply null-terminate the array by adding an extra zero element.</strong></p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// drivers/hid/hid-thrustmaster.c
 
@@ -189,7 +189,7 @@ if (!usb_check_int_endpoints(usbif, ep_addr)) {
 
 <p>After applying my solution, I recompiled the kernel, booted it in QEMU, and executed the repro program again. Voilà: the kernel panic no longer occurred! You can check the <a href="https://syzkaller.appspot.com/x/log.txt?x=13c26eb0580000">logs</a> directly from Syzbot.</p>
 
-<p>In some cases, testing may require more thorough analysis than simply verifying that the repro program no longer crashes, but for this bug, that was sufficient.</p>
+<p>In some cases, testing may require more thorough analysis than simply verifying that the repro program no longer crashes, but for this case, that was sufficient.</p>
 
 <h1 id="submission-process">Submission process</h1>
 
@@ -236,17 +236,17 @@ index 6c3e758bbb09..3b81468a1df2 100644
 
 <h2 id="3-review-and-acceptance">3. Review and acceptance</h2>
 
-<p>On February 7th, my patch was merged into the HID tree by its maintainer, <a href="https://www.linux.com/news/30-linux-kernel-developers-30-weeks-jiri-kosina/">Jiří Kosina</a> (SUSE Labs). Then, on February 17th, the patch was submitted for review by <a href="https://theorg.com/org/the-linux-foundation/org-chart/sasha-levin">Sasha Levin</a> (NVidia) for inclusion in the stable/LTS branch—designed for long-term support—and, around the same time, <a href="https://en.wikipedia.org/wiki/Greg_Kroah-Hartman">Greg Kroah-Hartman</a> submitted it for the 6.1-stable branch, which is the next version-specific stable tree.</p>
+<p>On February 7th, my patch was merged into the HID tree by its maintainer, <a href="https://www.linux.com/news/30-linux-kernel-developers-30-weeks-jiri-kosina/">Jiří Kosina</a> (SUSE Labs). Then, on February 17th, the patch was submitted for review by <a href="https://theorg.com/org/the-linux-foundation/org-chart/sasha-levin">Sasha Levin</a> (NVidia) for inclusion in the stable/LTS branch—designed for long-term support—and, around the same time, <a href="https://en.wikipedia.org/wiki/Greg_Kroah-Hartman">Greg Kroah-Hartman</a> (The Linux Foundation) submitted it for the 6.1-stable branch, which is the next version-specific stable tree.</p>
 
-<p>In summary, the 6.1-stable branch (maintained by Greg Kroah-Hartman) receives new, thoroughly tested patches for upcoming releases, while the stable/LTS branch (managed by Sasha Levin) ensures that critical fixes are available in long-term supported kernel versions.</p>
+<p>In summary, the 6.1-stable branch (maintained by Greg Kroah-Hartman) receives new, thoroughly tested patches for upcoming releases, while the stable/LTS branch (managed by Sasha Levin) is for the next long-term supported kernel version.</p>
 
 <h1 id="next-steps">Next steps</h1>
 
-<p>From this point forward, I plan to continue actively contributing to the Linux kernel, further expanding my knowledge and skills in low-level development. At the same time, I am looking to identify a kernel subsystem that truly captures my interest, so that I can dive deeper and specialize. I believe that with this focused approach, I can offer more significant contributions and keep a close eye on the evolutions and challenges in this fascinating field.</p>
+<p>From this point forward, I plan to continue actively contributing to the Linux kernel, further expanding my knowledge and skills in low-level development. At the same time, I am looking to identify a kernel subsystem that truly captures my interest, so that I can dive deeper and specialize. I believe that with this focused approach, I can offer more significant contributions and keep a close eye on the evolutions and challenges in this field.</p>
 
 <h1 id="final-considerations">Final considerations</h1>
 
-<p>Reaching this milestone – my first contribution to the Linux kernel – fills me with a profound sense of accomplishment. Every step of this journey, including the setbacks and victories, has been a valuable learning experience, marked by persistence and passion. Reflecting on this achievement, I recognize it as one of the most significant goals I’ve reached in my career.</p>
+<p>Reaching this milestone – my first contribution to the Linux kernel – fills me with a profound sense of accomplishment. Every step of this journey, including the setbacks and victories, has been a valuable learning experience, marked by persistence and passion. Reflecting on this achievement, I recognize it as one of the most significant goals I’ve reached in my IT life.</p>
 
 <p>I also hope that my journey serves as an invitation to anyone who, out of fear or guilt, feels constrained from exploring new technical areas beyond their current expertise. If you have an interest or passion for a field outside your main area of work, know that dedicating time to broaden your horizons is not only possible but incredibly rewarding. Every small step is part of a much larger journey. Keep exploring, learning, challenging yourself, and enjoying the process—because the world of technology is vast and full of opportunities waiting to be discovered.</p>
 
@@ -270,7 +270,7 @@ index 6c3e758bbb09..3b81468a1df2 100644
       <footer class="footer">
         <small>
           &copy;
-          <time datetime="2025-02-20T12:41:34-03:00"
+          <time datetime="2025-02-21T10:35:18-03:00"
             >2025</time
           >. All rights reserved.
         </small>
