@@ -131,7 +131,7 @@ As we saw, the problem was that the outer endpoint array did not contain a null 
 // drivers/hid/hid-thrustmaster.c
 
 ...
-u8 ep_addr[1] = {b_ep, 0};
+u8 ep_addr[2] = {b_ep, 0};
 
 if (!usb_check_int_endpoints(usbif, ep_addr)) {
     hid_err(hdev, "Unexpected non-int endpoint\n");
